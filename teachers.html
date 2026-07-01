@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teachers - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        <a href="{{ url_for('teachers') }}">Teachers</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">Report</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a href="{{ url_for('student_list') }}">📋 Student List</a>
+        <a href="{{ url_for('teachers') }}" class="active">👨‍🏫 Teachers</a>
+        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="margin:0;">👨‍🏫 All Teachers</h2>
+            <a href="{{ url_for('add_teacher') }}" class="btn btn-success">➕ Add Teacher</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr><th>#</th><th>Full Name</th><th>Username</th><th>Assigned Students</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for t in teachers %}
+                <tr>
+                    <td>{{ t.id }}</td>
+                    <td><strong>{{ t.full_name }}</strong></td>
+                    <td>{{ t.username }}</td>
+                    <td>
+                        <a href="{{ url_for('assign_students', teacher_id=t.id) }}"
+                           class="btn btn-primary btn-sm">👥 Assign Students</a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('delete_teacher', id=t.id) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete {{ t.full_name }}?')">🗑 Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">no teacher </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

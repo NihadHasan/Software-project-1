@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Students - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        <a href="{{ url_for('teachers') }}">Teachers</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a href="{{ url_for('student_list') }}">📋 Student List</a>
+        <a href="{{ url_for('teachers') }}" class="active">👨‍🏫 Teachers</a>
+        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+    </div>
+
+    <div class="card">
+        <h2>👥 Assign Students to {{ teacher.full_name }}</h2>
+        <p style="color:#666; margin-bottom:20px;"> select students for teacher , teacher attendance </p>
+
+        <form method="POST">
+            <div style="margin-bottom:15px; display:flex; gap:10px;">
+                <button type="button" class="btn btn-primary btn-sm"
+                    onclick="document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=true)">
+                    ✅ Select All
+                </button>
+                <button type="button" class="btn btn-warning btn-sm"
+                    onclick="document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false)">
+                    ✕ Deselect All
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr><th>Select</th><th>ID</th><th>Name</th><th>Department</th><th>Semester</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in all_students %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="students" value="{{ s.id }}"
+                                {% if s.id in assigned %}checked{% endif %}
+                                style="width:18px; height:18px; cursor:pointer;">
+                        </td>
+                        <td>{{ s.id }}</td>
+                        <td><strong>{{ s.name }}</strong></td>
+                        <td>{{ s.department }}</td>
+                        <td>{{ s.semester }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="text-align:center; padding:20px; color:#888;">no student </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top:20px;">
+                <button type="submit" class="btn btn-success">💾 Save Assignment</button>
+                <a href="{{ url_for('teachers') }}" class="btn btn-primary" style="margin-left:10px;">← Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">Report</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a href="{{ url_for('student_list') }}">📋 Student List</a>
+        <a href="{{ url_for('attendance') }}" class="active">✅ Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>✅ Mark Attendance</h2>
+
+        <!-- Date + Dept + Session Filter (GET) -->
+        <form method="GET" style="margin-bottom:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:5px;">📅 Date</label>
+                <input type="date" name="att_date" value="{{ selected_date }}"
+                       style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+            </div>
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:5px;">🗓 Session</label>
+                <select name="session"
+                    style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
+                    <option value="">--Session --</option>
+                    {% for s in sessions %}
+                    <option value="{{ s.session }}"
+                        {% if s.session == selected_session %}selected{% endif %}>
+                        {{ s.session }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:5px;">🏫 Department</label>
+                <select name="department"
+                    style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
+                    <option value="">--Department --</option>
+                    {% for d in departments %}
+                    <option value="{{ d.department }}"
+                        {% if d.department == selected_dept %}selected{% endif %}>
+                        {{ d.department }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-end;">
+                <button type="submit" class="btn btn-primary">🔍 Load </button>
+                <a href="{{ url_for('attendance') }}" class="btn btn-warning">✕ Reset</a>
+            </div>
+        </form>
+
+        <!-- Attendance POST form -->
+        <form method="POST">
+            <input type="hidden" name="att_date" value="{{ selected_date }}">
+            <input type="hidden" name="department" value="{{ selected_dept }}">
+            <input type="hidden" name="session" value="{{ selected_session }}">
+
+            <div style="background:#f0f7ff; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-size:14px;">
+                📌 Date: <strong>{{ selected_date }}</strong>
+                {% if selected_session %} | Session: <strong style="color:#ea4335">{{ selected_session }}</strong>{% endif %}
+                {% if selected_dept %} | Dept: <strong style="color:#1a73e8">{{ selected_dept }}</strong>{% endif %}
+                | Total student: <strong>{{ students|length }}</strong>
+            </div>
+
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Name</th><th>Session</th><th>Department</th><th>Attendance</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    <tr>
+                        <td>{{ s.id }}</td>
+                        <td><strong>{{ s.name }}</strong></td>
+                        <td>
+                            <span style="background:#fdeaea; color:#ea4335; padding:3px 10px;
+                                  border-radius:20px; font-size:12px; font-weight:600;">
+                                {{ s.session or '—' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span style="background:#e8f0fe; color:#1a73e8; padding:3px 10px;
+                                  border-radius:20px; font-size:12px; font-weight:600;">
+                                {{ s.department }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="att-radio">
+                                <label>
+                                    <input type="radio" name="status_{{ s.id }}" value="Present"
+                                        {% if s.status == 'Present' %}checked{% endif %}>
+                                    <span class="att-present">✔ Present</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="status_{{ s.id }}" value="Absent"
+                                        {% if s.status != 'Present' %}checked{% endif %}>
+                                    <span class="att-absent">✗ Absent</span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">
+                        {% if selected_dept or selected_session %}
+                             filter no student 
+                        {% else %}
+                            no student । First add Student 
+                        {% endif %}
+                    </td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if students %}
+            <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-success">💾 Save Attendance</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="document.querySelectorAll('input[value=Present]').forEach(r=>r.checked=true)">
+                    ✅ All Present
+                </button>
+                <button type="button" class="btn btn-danger"
+                    onclick="document.querySelectorAll('input[value=Absent]').forEach(r=>r.checked=true)">
+                    ✗ All Absent
+                </button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+</body>
+</html>

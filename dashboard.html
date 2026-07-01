@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('teachers') }}">Teachers</a>
+        {% endif %}
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">Report</a>
+        <a href="{{ url_for('logout') }}">Logout ({{ session['full_name'] or session['user'] }})</a>
+    </div>
+</nav>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}" class="active">🏠 Dashboard</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        {% endif %}
+        <a href="{{ url_for('student_list') }}">📋 Student List</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('teachers') }}">👨‍🏫 Teachers</a>
+        {% endif %}
+        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <h3>{{ total }}</h3>
+            <p>Total Students</p>
+        </div>
+        <div class="stat-card green">
+            <h3>{{ present }}</h3>
+            <p>Present Today</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total - present }}</h3>
+            <p>Absent Today</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Recently Added Students</h2>
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Photo</th><th>Name</th><th>Session</th><th>Department</th><th>Phone</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                {% for s in recent %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>
+                        {% if s.photo %}
+                            <img src="{{ url_for('static', filename='uploads/' + s.photo) }}"
+                                 style="width:36px; height:36px; border-radius:50%; object-fit:cover;">
+                        {% else %}
+                            <span style="font-size:24px;">👤</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.session or '—' }}</td>
+                    <td>{{ s.department }}</td>
+                    <td>{{ s.phone or '—' }}</td>
+                    <td>
+                        <a href="{{ url_for('id_card', id=s.id) }}" class="btn btn-primary btn-sm">🪪 ID Card</a>
+                        {% if session['role'] == 'admin' %}
+                        <a href="{{ url_for('edit_student', id=s.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ url_for('delete_student', id=s.id) }}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure?')">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" style="text-align:center; color:#888;">No students yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="margin-top:15px;">
+            <a href="{{ url_for('student_list') }}" class="btn btn-primary">View All Students</a>
+            {% if session['role'] == 'admin' %}
+            <a href="{{ url_for('add_student') }}" class="btn btn-success" style="margin-left:10px;">+ Add New Student</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

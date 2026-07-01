@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a href="{{ url_for('student_list') }}" class="active">📋 Student List</a>
+        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
+    </div>
+
+    <div class="card">
+        <h2>✏ Edit Student — ID: {{ student.id }}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="name" value="{{ student.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Academic Session *</label>
+                    <input type="text" name="session" value="{{ student.session or '' }}" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Department *</label>
+                    <select name="department" required>
+                        {% for dept in ['CSE','EEE','BBA','Civil','EECE','Architecture','Other'] %}
+                        <option value="{{ dept }}" {% if student.department == dept %}selected{% endif %}>{{ dept }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ student.email or '' }}">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" name="phone" value="{{ student.phone or '' }}">
+                </div>
+                <div class="form-group">
+                    <label>Update Photo (optional)</label>
+                    <input type="file" name="photo" accept="image/png, image/jpeg">
+                    {% if student.photo %}
+                    <p style="margin-top:8px; font-size:13px; color:#666;">
+                        Current:
+                        <img src="{{ url_for('static', filename='uploads/' + student.photo) }}"
+                             style="width:40px; height:40px; border-radius:50%; vertical-align:middle; object-fit:cover;">
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">💾 Save Changes</button>
+            <a href="{{ url_for('student_list') }}" class="btn btn-primary" style="margin-left:10px;">← Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

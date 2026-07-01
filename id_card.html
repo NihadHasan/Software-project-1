@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ID Card - {{ student.name }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; gap: 20px; }
+
+        .no-print { margin-bottom: 10px; }
+        .no-print button {
+            padding: 10px 24px; background: #1a73e8; color: white;
+            border: none; border-radius: 8px; font-size: 15px; cursor: pointer; margin: 5px;
+        }
+        .no-print a {
+            padding: 10px 24px; background: #666; color: white;
+            border-radius: 8px; font-size: 15px; text-decoration: none; margin: 5px;
+        }
+
+        .id-card {
+            width: 340px; background: white;
+            border-radius: 16px; overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white; padding: 18px; text-align: center;
+        }
+        .card-header h3 { font-size: 16px; letter-spacing: 1px; }
+        .card-header p { font-size: 12px; opacity: 0.85; margin-top: 3px; }
+
+        .card-body { padding: 20px; text-align: center; }
+        .photo-area {
+            width: 100px; height: 100px; border-radius: 50%;
+            overflow: hidden; margin: 0 auto 15px;
+            border: 4px solid #1a73e8;
+            background: #e8f0fe;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .photo-area img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-area span { font-size: 40px; }
+
+        .student-name { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .student-id { font-size: 13px; color: #1a73e8; font-weight: 600; margin-bottom: 14px; }
+
+        .info-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .info-table tr td { padding: 7px 10px; font-size: 13px; border-bottom: 1px solid #f0f0f0; }
+        .info-table tr td:first-child { color: #666; width: 45%; }
+        .info-table tr td:last-child { font-weight: 600; color: #333; }
+
+        .card-footer {
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white; padding: 10px; text-align: center; font-size: 11px; opacity: 0.9;
+        }
+
+        @media print {
+            body { background: white; }
+            .no-print { display: none; }
+            .id-card { box-shadow: none; border: 2px solid #1a73e8; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="no-print">
+    <button onclick="window.print()">🖨️ Print ID Card</button>
+    <a href="{{ url_for('student_list') }}">← Back</a>
+</div>
+
+<div class="id-card">
+    <div class="card-header">
+        <h3>🎓 STUDENT ID CARD</h3>
+        <p>Pabna University of Science And Technology</p>
+    </div>
+
+    <div class="card-body">
+        <div class="photo-area">
+            {% if student.photo %}
+                <img src="{{ url_for('static', filename='uploads/' + student.photo) }}" alt="Photo">
+            {% else %}
+                <span>👤</span>
+            {% endif %}
+        </div>
+
+        <div class="student-name">{{ student.name }}</div>
+        <div class="student-id">ID: {{ student.id }}</div>
+
+        <table class="info-table">
+            <tr>
+                <td>Session</td>
+                <td>{{ student.session or '—' }}</td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td>{{ student.department }}</td>
+            </tr>
+            <tr>
+                <td>Phone</td>
+                <td>{{ student.phone or '—' }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td style="font-size:11px;">{{ student.email or '—' }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card-footer">
+        This card is the property of the institution
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List - Student MS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <span class="brand">🎓 Student Management System</span>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('student_list') }}">Students</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('teachers') }}">Teachers</a>
+        {% endif %}
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">Report</a>
+        <a href="{{ url_for('logout') }}">Logout ({{ session['full_name'] or session['user'] }})</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="sidenav-links">
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        {% endif %}
+        <a href="{{ url_for('student_list') }}" class="active">📋 Student List</a>
+        {% if session['role'] == 'admin' %}
+        <a href="{{ url_for('teachers') }}">👨‍🏫 Teachers</a>
+        {% endif %}
+        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>📋 All Students</h2>
+        <form class="search-form" method="GET">
+            <input type="text" name="search"
+                   placeholder="🔍 Search by ID, Name, Department or Email..."
+                   value="{{ search }}">
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+            {% if search %}
+            <a href="{{ url_for('student_list') }}" class="btn btn-warning">✕ Clear</a>
+            {% endif %}
+        </form>
+
+        <table>
+            <thead>
+                <tr><th>ID</th><th>Photo</th><th>Name</th><th>Session</th><th>Department</th><th>Email</th><th>Phone</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>
+                        {% if s.photo %}
+                            <img src="{{ url_for('static', filename='uploads/' + s.photo) }}"
+                                 style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #1a73e8;">
+                        {% else %}
+                            <span style="font-size:26px;">👤</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ s.name }}</strong></td>
+                    <td>
+                        <span style="background:#fdeaea; color:#ea4335; padding:3px 10px;
+                              border-radius:20px; font-size:12px; font-weight:600;">
+                            {{ s.session or '—' }}
+                        </span>
+                    </td>
+                    <td>{{ s.department }}</td>
+                    <td>{{ s.email or '—' }}</td>
+                    <td>{{ s.phone or '—' }}</td>
+                    <td>
+                        <a href="{{ url_for('id_card', id=s.id) }}" class="btn btn-primary btn-sm">🪪 ID</a>
+                        {% if session['role'] == 'admin' %}
+                        <a href="{{ url_for('edit_student', id=s.id) }}" class="btn btn-warning btn-sm">✏ Edit</a>
+                        <a href="{{ url_for('delete_student', id=s.id) }}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete {{ s.name }}?')">🗑</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">
+                    {% if search %}No students found for "{{ search }}".{% else %}No students added yet.{% endif %}
+                </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="margin-top:15px;">
+            <span style="color:#666; font-size:13px;">Total: <strong>{{ students|length }}</strong> student(s)</span>
+            {% if session['role'] == 'admin' %}
+            <a href="{{ url_for('add_student') }}" class="btn btn-success" style="float:right;">+ Add New Student</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
