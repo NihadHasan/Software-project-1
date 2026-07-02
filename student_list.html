@@ -22,16 +22,16 @@
 
 <div class="container">
     <div class="sidenav-links">
-        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('dashboard') }}"> Dashboard</a>
         {% if session['role'] == 'admin' %}
-        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
+        <a href="{{ url_for('add_student') }}"> Add Student</a>
         {% endif %}
-        <a href="{{ url_for('student_list') }}" class="active">📋 Student List</a>
+        <a href="{{ url_for('student_list') }}" class="active"> Student List</a>
         {% if session['role'] == 'admin' %}
-        <a href="{{ url_for('teachers') }}">👨‍🏫 Teachers</a>
+        <a href="{{ url_for('teachers') }}">Teachers</a>
         {% endif %}
-        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
-        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+        <a href="{{ url_for('attendance') }}"> Attendance</a>
+        <a href="{{ url_for('attendance_report') }}">Report</a>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -41,12 +41,12 @@
     {% endwith %}
 
     <div class="card">
-        <h2>📋 All Students</h2>
+        <h2>All Students</h2>
         <form class="search-form" method="GET">
             <input type="text" name="search"
-                   placeholder="🔍 Search by ID, Name, Department or Email..."
+                   placeholder="Search by ID, Name, Department or Email..."
                    value="{{ search }}">
-            <button type="submit" class="btn btn-primary">🔍 Search</button>
+            <button type="submit" class="btn btn-primary"> Search</button>
             {% if search %}
             <a href="{{ url_for('student_list') }}" class="btn btn-warning">✕ Clear</a>
             {% endif %}

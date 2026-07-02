@@ -28,16 +28,16 @@
 
 <div class="container">
     <div class="sidenav-links no-print">
-        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
-        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
-        <a href="{{ url_for('student_list') }}">📋 Student List</a>
-        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
-        <a href="{{ url_for('attendance_report') }}" class="active">📊 Report</a>
+        <a href="{{ url_for('dashboard') }}"> Dashboard</a>
+        <a href="{{ url_for('add_student') }}"> Add Student</a>
+        <a href="{{ url_for('student_list') }}"> Student List</a>
+        <a href="{{ url_for('attendance') }}"> Attendance</a>
+        <a href="{{ url_for('attendance_report') }}" class="active"> Report</a>
     </div>
 
     <!-- FILTER FORM -->
     <div class="card no-print">
-        <h2>📊 Attendance Report</h2>
+        <h2> Attendance Report</h2>
         <form method="GET" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
             <div>
                 <label style="display:block; font-weight:600; margin-bottom:5px;">📅 Date</label>
@@ -45,7 +45,7 @@
                        style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
             </div>
             <div>
-                <label style="display:block; font-weight:600; margin-bottom:5px;">🗓 Session</label>
+                <label style="display:block; font-weight:600; margin-bottom:5px;"> Session</label>
                 <select name="session"
                     style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
                     <option value="">--Session --</option>
@@ -58,7 +58,7 @@
                 </select>
             </div>
             <div>
-                <label style="display:block; font-weight:600; margin-bottom:5px;">🏫 Department</label>
+                <label style="display:block; font-weight:600; margin-bottom:5px;"> Department</label>
                 <select name="department"
                     style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
                     <option value="">--Department --</option>
@@ -71,7 +71,7 @@
                 </select>
             </div>
             <div style="display:flex; gap:8px; align-items:flex-end;">
-                <button type="submit" class="btn btn-primary">🔍 Filter</button>
+                <button type="submit" class="btn btn-primary"> Filter</button>
                 <a href="{{ url_for('attendance_report') }}" class="btn btn-warning">✕ Reset</a>
             </div>
         </form>
@@ -127,7 +127,7 @@
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;" class="no-print">
             <div>
-                <h2 style="margin:0;">📊 Overall Summary</h2>
+                <h2 style="margin:0;">Overall Summary</h2>
                 {% if selected_dept or selected_session %}
                 <p style="color:#555; font-size:13px; margin-top:5px;">
                     {% if selected_session %}Session: <strong style="color:#ea4335">{{ selected_session }}</strong>{% endif %}
@@ -199,7 +199,7 @@
         </table>
 
         <div style="margin-top:16px; background:#f8f9fa; padding:14px; border-radius:8px; font-size:13px;">
-            <strong>📋 Marks:</strong>
+            <strong>Marks:</strong>
             <span style="color:#1a73e8">■ 90-100%=10</span> |
             <span style="color:#34a853">■ 80-89%=9 | 70-79%=8</span> |
             <span style="color:#fbbc04">■ 65-69%=7 | 60-64%=6</span> |
@@ -210,7 +210,7 @@
     <!-- DATE BUTTONS -->
     {% if dates %}
     <div class="card no-print">
-        <h2>🗓 All Attendance date</h2>
+        <h2> All Attendance date</h2>
         <div style="display:flex; flex-wrap:wrap; gap:10px;">
             {% for d in dates %}
             <a href="{{ url_for('attendance_report', report_date=d.date, department=selected_dept, session=selected_session) }}"

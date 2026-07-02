@@ -25,16 +25,16 @@
     {% endwith %}
 
     <div class="sidenav-links">
-        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
-        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
-        <a href="{{ url_for('student_list') }}">📋 Student List</a>
-        <a href="{{ url_for('teachers') }}" class="active">👨‍🏫 Teachers</a>
-        <a href="{{ url_for('attendance') }}">✅ Attendance</a>
-        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+        <a href="{{ url_for('dashboard') }}"> Dashboard</a>
+        <a href="{{ url_for('add_student') }}"> Add Student</a>
+        <a href="{{ url_for('student_list') }}"> Student List</a>
+        <a href="{{ url_for('teachers') }}" class="active"> Teachers</a>
+        <a href="{{ url_for('attendance') }}">Attendance</a>
+        <a href="{{ url_for('attendance_report') }}"> Report</a>
     </div>
 
     <div class="card">
-        <h2>👥 Assign Students to {{ teacher.full_name }}</h2>
+        <h2> Assign Students to {{ teacher.full_name }}</h2>
         <p style="color:#666; margin-bottom:20px;"> select students for teacher , teacher attendance </p>
 
         <form method="POST">
@@ -73,7 +73,7 @@
             </table>
 
             <div style="margin-top:20px;">
-                <button type="submit" class="btn btn-success">💾 Save Assignment</button>
+                <button type="submit" class="btn btn-success"> Save Assignment</button>
                 <a href="{{ url_for('teachers') }}" class="btn btn-primary" style="margin-left:10px;">← Back</a>
             </div>
         </form>

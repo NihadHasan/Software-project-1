@@ -19,11 +19,11 @@
 
 <div class="container">
     <div class="sidenav-links">
-        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
-        <a href="{{ url_for('add_student') }}">➕ Add Student</a>
-        <a href="{{ url_for('student_list') }}">📋 Student List</a>
-        <a href="{{ url_for('attendance') }}" class="active">✅ Attendance</a>
-        <a href="{{ url_for('attendance_report') }}">📊 Report</a>
+        <a href="{{ url_for('dashboard') }}"> Dashboard</a>
+        <a href="{{ url_for('add_student') }}"> Add Student</a>
+        <a href="{{ url_for('student_list') }}"> Student List</a>
+        <a href="{{ url_for('attendance') }}" class="active"> Attendance</a>
+        <a href="{{ url_for('attendance_report') }}"> Report</a>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -33,7 +33,7 @@
     {% endwith %}
 
     <div class="card">
-        <h2>✅ Mark Attendance</h2>
+        <h2> Mark Attendance</h2>
 
         <!-- Date + Dept + Session Filter (GET) -->
         <form method="GET" style="margin-bottom:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
@@ -43,7 +43,7 @@
                        style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
             </div>
             <div>
-                <label style="display:block; font-weight:600; margin-bottom:5px;">🗓 Session</label>
+                <label style="display:block; font-weight:600; margin-bottom:5px;">Session</label>
                 <select name="session"
                     style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
                     <option value="">--Session --</option>
@@ -56,7 +56,7 @@
                 </select>
             </div>
             <div>
-                <label style="display:block; font-weight:600; margin-bottom:5px;">🏫 Department</label>
+                <label style="display:block; font-weight:600; margin-bottom:5px;"> Department</label>
                 <select name="department"
                     style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; min-width:150px;">
                     <option value="">--Department --</option>
@@ -69,7 +69,7 @@
                 </select>
             </div>
             <div style="display:flex; gap:8px; align-items:flex-end;">
-                <button type="submit" class="btn btn-primary">🔍 Load </button>
+                <button type="submit" class="btn btn-primary"> Load </button>
                 <a href="{{ url_for('attendance') }}" class="btn btn-warning">✕ Reset</a>
             </div>
         </form>
@@ -137,7 +137,7 @@
 
             {% if students %}
             <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button type="submit" class="btn btn-success">💾 Save Attendance</button>
+                <button type="submit" class="btn btn-success"> Save Attendance</button>
                 <button type="button" class="btn btn-primary"
                     onclick="document.querySelectorAll('input[value=Present]').forEach(r=>r.checked=true)">
                     ✅ All Present
